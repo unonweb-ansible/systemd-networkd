@@ -1,7 +1,6 @@
 ---
 # NOTES
 # -----
-# systemd-networkd is here setup to automatically use systemd-resolved
 
 # ATT
 # ---
@@ -23,6 +22,7 @@
         name: NetworkManager.service
         state: stopped
         enabled: false
+      failed_when: false
 
     # systemd-networkd.service
     - name: Start & enable systemd-networkd.service
@@ -31,55 +31,6 @@
         name: systemd-networkd.service
         state: started
         enabled: true
-
-    # systemd-resolved
-    - name: Start & enable systemd-resolved.service
-      become: true
-      ansible.builtin.systemd_service:
-        name: systemd-resolved.service
-        state: started
-        enabled: true
-
-    # stat etc resolv.conf
-    - name: Stat /etc/resolv.conf
-      become: true
-      ansible.builtin.stat:
-        path: /etc/resolv.conf
-      register: _etc_resolv
-
-    # stat systemd resolv.conf
-    - name: Stat /run/systemd/resolve/resolv.conf
-      become: true
-      ansible.builtin.stat:
-        path: /run/systemd/resolve/resolv.conf
-      register: _systemd_resolv
-
-    - when: 
-      - _systemd_resolv.stat.exists == true
-      - _etc_resolv.stat.lnk_target != "/run/systemd/resolve/resolv.conf"
-      block:
-
-      # cp
-      - name: Backup /etc/resolv.conf
-        become: true
-        ansible.builtin.copy:
-          src: /etc/resolv.conf
-          dest: /etc/resolv.conf.backup
-          
-      # rm
-      - name: Remove /etc/resolv.conf
-        become: true
-        ansible.builtin.file:
-          path: /etc/resolv.conf
-          state: absent
-
-      # link
-      - name: Link /run/systemd/resolve/resolv.conf to /etc/resolv.conf
-        become: true
-        ansible.builtin.file:
-          src: /run/systemd/resolve/resolv.conf
-          dest: /etc/resolv.conf
-          state: link
 
   # mkdir
   - name: Mkdir /etc/systemd/network
