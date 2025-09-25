@@ -1,0 +1,7 @@
+---
+systemd_networkd:
+  state: # enabled
+  config:
+    files: 
+      cp: []
+      rm: []
