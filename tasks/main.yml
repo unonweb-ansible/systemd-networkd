@@ -3,6 +3,10 @@
 # -----
 # systemd-networkd is here setup to automatically use systemd-resolved
 
+# ATT
+# ---
+# only implemented state is "enabled"
+
 - name: systemd-networkd role
   tags:
     - systemd-networkd
@@ -97,6 +101,19 @@
       ansible.builtin.copy:
         src: "{{ item }}"
         dest: /etc/systemd/network/
+
+  # templates
+  - when: systemd_networkd.config.templates | length > 0
+    block:
+    
+    # template
+    - name: Template config files {{ systemd_networkd.config.templates }}
+      become: true
+      loop: "{{ systemd_networkd.config.templates }}"
+      ansible.builtin.template:
+        src: "{{ item }}"
+        dest: "/etc/systemd/network/{{ item.split('/')[1].replace('.j2', '') }}" # # ziska/wg-alfdorf.netdev.j2 --> wg-alfdorf.netdev.j2 --> wg-alfdorf.netdev
+        mode: o=rw,g=,o=
 
   # rm config
   - when: systemd_networkd.config.files.rm | length > 0
