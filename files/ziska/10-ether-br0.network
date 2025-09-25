@@ -1,0 +1,7 @@
+[Match]
+Type=ether
+
+[Network]
+Description=Connect any ethernet interface with br0 bridge
+DHCP=ipv4
+Bridge=br0

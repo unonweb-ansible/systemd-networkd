@@ -1,0 +1,14 @@
+[NetDev]
+Name=wg-alfdorf
+Kind=wireguard
+Description=wg - alfdorf
+
+[WireGuard]
+PrivateKey={{ systemd_networkd.config.secrets.wg_private_key }}
+
+[WireGuardPeer]
+PublicKey=1jPuwR5/7GLIqBhxXajzUwC+BfpsDBg/tvGJX4nJEkc=
+PresharedKey=l4Wras1OSrv/c8g4mLtVsaKqfP79S1WGCuvZLsXtn20=
+AllowedIPs=192.168.178.0/24,0.0.0.0/0,fde0:18b2:6938::/64,::/0
+Endpoint=4tumhaw99p25lctb.myfritz.net:51538
+PersistentKeepalive=25

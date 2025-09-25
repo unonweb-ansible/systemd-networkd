@@ -1,0 +1,13 @@
+[Match]
+Name=wg-alfdorf
+
+[Network]
+DNSDefaultRoute=true
+DNS=192.168.178.1
+DNS=fde0:18b2:6938::de15:c8ff:fef0:9b6c
+Address=192.168.178.203/24
+Address=fde0:18b2:6938::203/64
+DHCP=no
+
+[Link]
+ActivationPolicy=manual
